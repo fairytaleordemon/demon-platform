@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="false">
+
+	<property name="loggingRoot" value="/opt/applications/logs" />
+	<property name="appName" value="app-client-fdfs" />
+	<property name="loggingCharset" value="UTF-8" />
+	<property name="maxSizeHour" value="720" />
+	<property name="patternFull" value="%-20(%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread]) %-5level %logger{80} - %msg%n" />
+
+	<appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+		<target>System.out</target>
+		<encoder>
+			<pattern>${patternFull}</pattern>
+			<charset>${loggingCharset}</charset>
+		</encoder>
+	</appender>
+
+	<appender name="logfile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${loggingRoot}/${appName}.log</file>
+		<append>true</append>
+		<encoder>
+			<pattern>${patternFull}</pattern>
+			<charset>${loggingCharset}</charset>
+		</encoder>
+		<prudent>false</prudent>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${loggingRoot}/${appName}.%d{yyyy-MM-dd-HH}.log.gz</fileNamePattern>
+			<maxHistory>${maxSizeHour}</maxHistory>
+		</rollingPolicy>
+	</appender>
+
+	<appender name="logErrorfile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${loggingRoot}/${appName}_error.log</file>
+		<append>true</append>
+		<encoder>
+			<pattern>${patternFull}</pattern>
+			<charset>${loggingCharset}</charset>
+		</encoder>
+		<prudent>false</prudent>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${loggingRoot}/${appName}_error.%d{yyyy-MM-dd-HH}.log.gz</fileNamePattern>
+			<maxHistory>${maxSizeHour}</maxHistory>
+		</rollingPolicy>
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>ERROR</level>
+		</filter>
+	</appender>
+
+
+	
+	<logger name="org.hibernate.SQL" level="trace" />
+	<logger name="org.hibernate.type" level="trace" />
+	<logger name="org.springframework" level="info" />
+	<logger name="com.desai" level="debug" />
+	<logger name="com.telecom.platform.client" level="debug" />
+	
+	<logger name="com.telecom" level="info"/>
+
+	<!--root log -->
+	<root level="debug" additivity="false">
+		<appender-ref ref="CONSOLE" />
+	</root>
+</configuration>
